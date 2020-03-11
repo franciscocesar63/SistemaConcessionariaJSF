@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+        <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+        <h:outputStylesheet name="css/style.css"/>
+    </h:head>
+    <h:body>
+        <p:outputLabel value="Cadastro de Veículos"/><br/>
+        <br/>
+
+        <p:panel id="conteudo" style="border: none !important">
+            <h:form id="formCadastro" rendered="#{veiculoMB.renderedInit}">
+
+                <p:commandButton value="Ver todos"
+                                 actionListener="#{veiculoMB.setRenderedInit(false)}"
+                                 update="conteudo"
+                                 process="@this"
+                                 />
+
+                <br/><br/>
+
+                <p:growl showSummary="true"/>
+
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Marca"/>
+                    <p:inputText value="#{veiculoMB.veiculo.marca}" required="true" requiredMessage="A marca é obrigatória"/>
+                    <p:outputLabel value="Modelo"/>
+                    <p:inputText value="#{veiculoMB.veiculo.modelo}" required="true" requiredMessage="O modelo é obrigatório"/>
+                    <p:outputLabel value="Valor"/>
+                    <p:inputText value="#{veiculoMB.veiculo.valor}" required="true" requiredMessage="O valor é obrigatório"/>
+                    <p:outputLabel value="Placa"/>
+                    <p:inputMask style="text-transform: uppercase !important" value="#{veiculoMB.veiculo.placa}" mask="aaa-9999" required="true" requiredMessage="A placa é obrigatória"/>
+                        
+                   
+
+                </h:panelGrid> 
+                <br/>
+               
+                <p:commandButton value="salvar" 
+                                 actionListener="#{veiculoMB.save()}"
+                                 update="conteudo"
+                                 process="@form"
+                                 />
+               
+                <p:commandButton value="limpar" resetValues="true" update="@form" process="@this"/>
+            </h:form>
+            <br/>
+            <h:form prependId="false" rendered="#{!veiculoMB.renderedInit}" id="tableVeiculos">
+
+                <p:commandButton value="Cadastrar Veículo" 
+                                 update="conteudo" 
+                                 icon="pi pi-check"
+                                 process="@this" 
+                                 actionListener="#{veiculoMB.setRenderedInit(true)}"/>
+                <br/>
+                <br/>
+                <p:dataTable value="#{veiculoMB.veiculos()}" var="veiculo" style="border-left: none !important; border-right: none !important">
+                    <f:facet name="header">
+                        Lista de Veículos
+                    </f:facet>
+
+                    <p:column headerText="Marca">
+                        #{veiculo.marca}
+                    </p:column>
+                    <p:column headerText="Modelo">
+                        #{veiculo.modelo}
+                    </p:column>
+                    <p:column headerText="Placa">
+                        #{veiculo.placa}
+                    </p:column>
+                    <p:column headerText="Valor">
+                        #{veiculo.valor}
+                    </p:column>
+                    <p:column headerText="Ação">
+                        <p:commandButton value="editar" 
+                                         process="@this"
+                                         actionListener="#{veiculoMB.prepareUpdate(veiculo)}"
+                                         update="conteudo"/>&nbsp;
+                        <p:commandButton value="excluir" 
+                                         process="@this"
+                                         styleClass="btn-excluir"
+                                         action="#{veiculoMB.prepareRemoveVeiculo(veiculo)}"
+                                        /> 
+                             
+                        
+                    </p:column>
+
+
+                </p:dataTable>
+
+            </h:form>
+
+        </p:panel>      
+    </h:body>
+</html>
+
